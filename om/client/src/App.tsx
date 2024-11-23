@@ -39,7 +39,6 @@ const App = () => {
                 })
             }
             pc.ontrack = async (event) => {
-                console.log(event.streams[0]);
                 if (event.track.kind == "video" && localVideoRef.current) {
 
 
@@ -48,22 +47,21 @@ const App = () => {
                 }
             }
             SetPeer(pc)
-            pc.onicecandidate = (ice) => {
-                if (ice.candidate) {
-                    signalingServer.send(JSON.stringify({
-                        type: "ice", offer: ice.candidate
-                    }));
-
-
-                }
-
-            }
+           
             pc.onnegotiationneeded = async () => {
 
                 const offer = await pc.createOffer()
                 await pc.setLocalDescription(offer)
-                console.log("send-offer-in");
+                pc.onicecandidate = (ice) => {
+                    if (ice.candidate) {
+                        signalingServer.send(JSON.stringify({
+                            type: "ice", ice: ice.candidate
+                        }));
 
+
+                    }
+
+                }
                 signalingServer.send(JSON.stringify({ type: "send-Offer", offer: pc.localDescription }));
 
 
@@ -75,11 +73,7 @@ const App = () => {
         else if (data.type == "create-answer") {
             const peer = new RTCPeerConnection(iceServer)
             newSetPeer(peer)
-            if (LocalStream) {
-                LocalStream.getTracks().forEach(track => {
-                    peer.addTrack(track, LocalStream)
-                })
-            }
+          
 
             peer.ontrack = async (event) => {
                 console.log(event.streams[0]);
@@ -87,7 +81,8 @@ const App = () => {
 
 
                     remoteVideoRef.current.srcObject = event.streams[0]
-                    await remoteVideoRef.current.play()
+                    await remoteVideoRef.current.play().then((e)=>console.log(e)
+                    ).catch((e) => console.log(e)).catch((e) => console.log(e))
                 }
             }
             await peer?.setRemoteDescription(new RTCSessionDescription(data.offer))
@@ -104,7 +99,7 @@ const App = () => {
         } else if (data.type == "send-ice") {
 
 
-            newPeer?.addIceCandidate(new RTCIceCandidate(data.ice))
+           await newPeer?.addIceCandidate(new RTCIceCandidate(data.ice))
         }
 
 
@@ -131,11 +126,13 @@ const App = () => {
 
     }, [signalingServer, handleSignalingServerMessage]);
     useEffect(() => { getCamera(); }, [])
+    console.log("ji");
+    
 
     return (
         <div>
             <video width={300} height={300} muted  ref={localVideoRef}></video>
-            <video width={300} height={300}  ref={remoteVideoRef}></video>
+            <video width={300} height={300} autoPlay muted playsInline  ref={remoteVideoRef}></video>
         </div>
     );
 };

@@ -18,11 +18,9 @@ wss.on('connection', (ws) => {
   ws.onmessage = (msg) => {
 
     const data = JSON.parse(msg.data.toLocaleString())
-
     switch (data.type) {
       case 'user': {
         sender ? receiver = ws : sender = ws
-
 
         if (receiver && sender) {
           console.log("send");
@@ -37,16 +35,16 @@ wss.on('connection', (ws) => {
         send?.send(JSON.stringify({type:"create-answer",offer:data.offer}))
 
         break;
-
       }
       case "send-ans": {
         const send = ws == sender ? receiver : sender 
         send?.send(JSON.stringify({type:"answer",ans:data.ans}))
         break;
-
       }
       case "ice": {
         const send = ws == sender ? receiver : sender
+  
+        
         send?.send(JSON.stringify({type:"send-ice",ice:data.ice}))
 
         break;
