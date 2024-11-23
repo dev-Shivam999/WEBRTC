@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const Sender = () => {
-    const socket = useMemo(() => new WebSocket("ws://localhost:3000"), []);
+    const socket = useMemo(() => new WebSocket(`${import.meta.env.VITE_SOME_KEY}`), []);
     const localVideoRef = useRef<HTMLVideoElement>(null);
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
     const [peerConnection, setPeerConnection] = useState<RTCPeerConnection | null>(null);
