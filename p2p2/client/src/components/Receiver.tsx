@@ -10,6 +10,8 @@ const Receiver = () => {
     const server = {
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
     };
+    localStream
+    peer
 
     useEffect(() => {
         socket.onopen = () => {

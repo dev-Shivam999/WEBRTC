@@ -5,7 +5,7 @@ const Sender = () => {
     const localVideoRef = useRef<HTMLVideoElement>(null);
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
     const [peerConnection, setPeerConnection] = useState<RTCPeerConnection | null>(null);
-
+peerConnection
     const server = {
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
     };
