@@ -1,11 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 const Sender = () => {
     const socket = useMemo(() => new WebSocket(`${import.meta.env.VITE_SOME_KEY}`), []);
     const localVideoRef = useRef<HTMLVideoElement>(null);
-    const remoteVideoRef = useRef<HTMLVideoElement>(null);
-    const [peerConnection, setPeerConnection] = useState<RTCPeerConnection | null>(null);
-peerConnection
+    const remoteVideoRef = useRef<HTMLVideoElement>(null); 
     const server = {
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
     };
@@ -16,7 +14,7 @@ peerConnection
         };
 
         const pc = new RTCPeerConnection(server);
-        setPeerConnection(pc);
+
 
         pc.onicecandidate = (event) => {
             if (event.candidate) {

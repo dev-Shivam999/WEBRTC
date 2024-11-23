@@ -1,17 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 const Receiver = () => {
     const socket = useMemo(() => new WebSocket(`${import.meta.env.VITE_SOME_KEY}`), []);
    const remoteVideoRef = useRef<HTMLVideoElement>(null);
     const localVideoRef = useRef<HTMLVideoElement>(null);
-    const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-    const [peer, setPeer] = useState<RTCPeerConnection | null>(null);
-
+   
     const server = {
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
     };
-    localStream
-    peer
+
 
     useEffect(() => {
         socket.onopen = () => {
@@ -19,7 +16,7 @@ const Receiver = () => {
         };
 
         const pc = new RTCPeerConnection(server);
-        setPeer(pc);
+     
 
         pc.ontrack = (event) => {
             if (event.track.kind === "video" && remoteVideoRef.current) {
@@ -50,7 +47,7 @@ const Receiver = () => {
 
         return () => {
             socket.close();
-            pc.close();
+          
         };
     }, [socket]);
 
@@ -59,7 +56,6 @@ const Receiver = () => {
             audio: true,
             video: true,
         });
-        setLocalStream(stream);
         if (localVideoRef.current) {
             localVideoRef.current.srcObject = stream;
             localVideoRef.current.play();
