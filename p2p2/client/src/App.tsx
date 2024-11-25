@@ -8,6 +8,10 @@ import Receiver from './components/Receiver'
 
 function App() {
   return (
+
+
+
+    
   <>
    <nav>
     <Link to={'/sender'}>sender</Link>
